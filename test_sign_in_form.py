@@ -24,11 +24,8 @@ def test_check_correct_login(driver, wait):
 
 # NOTE: Negative: Check user using incorrect data
 @pytest.mark.xfail
-#FIXME
 def test_check_incorrect_login(driver, wait):
     driver.get(URL)
-    # driver.delete_all_cookies()
-    # driver.refresh()
     driver.find_element(*email).send_keys(incorrect_name)
     driver.find_element(*password).send_keys(user_password)
     driver.find_element(*submit_bt).click()
@@ -37,12 +34,9 @@ def test_check_incorrect_login(driver, wait):
     assert actual_alert_text.text == expect_alert_text, 'You are login'
 
 #NOTE: Negative: Check password using incorrect data
-#FIXME
 @pytest.mark.xfail
 def test_check_incorrect_password(driver, wait):
     driver.get(URL)
-    # driver.delete_all_cookies()
-    # driver.refresh()
     driver.find_element(*email).send_keys(user_name)
     driver.find_element(*password).send_keys(incorrect_password)
     driver.find_element(*submit_bt).click()
