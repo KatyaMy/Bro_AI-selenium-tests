@@ -10,7 +10,8 @@ password = (By.CSS_SELECTOR, '#pass')
 submit_bt = (By.XPATH, '//button[@type="submit"]')
 alert_sms = (By.XPATH, '//div[@role="alert"]')
 
-#NOTE: Positive: Check login
+
+# NOTE: Positive: Check login
 def test_check_correct_login(driver, wait):
     driver.get(URL)
     # driver.delete_all_cookies()
@@ -21,6 +22,7 @@ def test_check_correct_login(driver, wait):
     alert_txt = wait.until(
         EC.visibility_of_element_located(alert_sms))
     assert alert_txt.text == alert_mms, '_Not correct login or password'
+
 
 # NOTE: Negative: Check user using incorrect data
 @pytest.mark.xfail
@@ -33,7 +35,8 @@ def test_check_incorrect_login(driver, wait):
         EC.visibility_of_element_located(alert_sms))
     assert actual_alert_text.text == expect_alert_text, 'You are login'
 
-#NOTE: Negative: Check password using incorrect data
+
+# NOTE: Negative: Check password using incorrect data
 @pytest.mark.xfail
 def test_check_incorrect_password(driver, wait):
     driver.get(URL)
@@ -43,3 +46,4 @@ def test_check_incorrect_password(driver, wait):
     actual_alert_text = wait.until(
         EC.visibility_of_element_located(alert_sms))
     assert actual_alert_text.text == expect_alert_text, 'You are login'
+
