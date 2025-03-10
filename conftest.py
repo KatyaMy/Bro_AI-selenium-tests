@@ -1,10 +1,13 @@
 import pytest
+from faker import Faker
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
 from selenium.webdriver.support.wait import WebDriverWait
-from faker import Faker
 
 fake = Faker()
+
+
 
 @pytest.fixture(scope="session")
 def options():
@@ -24,10 +27,11 @@ def driver(options):
     driver.quit()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def wait(driver):
-    wait = WebDriverWait(driver, timeout=15)
+    wait = WebDriverWait(driver, timeout=20)
     return wait
+
 
 
 @pytest.fixture
@@ -36,6 +40,7 @@ def registration_data():
     return {'email': 'TestNeW_0@mail.com',
             'password': 'HuTc5658',
             'name': 'User_00'}
+
 
 @pytest.fixture()
 def new_user():
