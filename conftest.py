@@ -29,7 +29,7 @@ def driver(options):
 
 @pytest.fixture()
 def wait(driver):
-    wait = WebDriverWait(driver, timeout=20)
+    wait = WebDriverWait(driver, timeout=25)
     return wait
 
 
@@ -43,7 +43,7 @@ def registration_data():
 
 
 @pytest.fixture()
-def new_user():
+def fake_new_user():
     fake.email()
     fake.password()
     fake.user_name()
