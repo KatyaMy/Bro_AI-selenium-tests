@@ -85,16 +85,15 @@ def test_registration_new_user_with_upper_case_email(driver, wait):
     ('Test_User_07@hotmail.com', '123HyNcVb', 'ViktorCi')
 ])
 def test_registration_new_user_with_underline_in_email_field(driver, wait, email, user_password, user_name):
-    driver.get(URL)
-    driver.find_element(By.ID, 'email').send_keys(email)
-    driver.find_element(By.ID, 'pass1').send_keys(user_password)
-    driver.find_element(By.ID, 'pass2').send_keys(user_password)
-    driver.find_element(By.ID, 'name').send_keys(user_name)
-    register_btt = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@class='ui button blue']")))
-    register_btt.click()
+    page = Register(driver)
+    page.open_page()
+    register_field = RegistrationPage(driver, wait)
+    register_field.fill_email(email)
+    register_field.fill_password(user_password)
+    register_field.fill_name(user_name)
+    register_field.click_register_button()
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
-
 
 """TC-NN-006 Ввод цифр в аккаунтной части поля "Email";
 TC-NN-007 Ввод цифр в доменной части поля "Email" """
