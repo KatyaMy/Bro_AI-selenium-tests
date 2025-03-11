@@ -1,10 +1,8 @@
-import time
-
 import pytest
 from faker import Faker
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from components import Register
+from page.components import Register
 from data import generate_fixed_length_email
 from page.registration_page import RegistrationPage
 
