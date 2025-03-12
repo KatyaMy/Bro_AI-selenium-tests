@@ -6,6 +6,7 @@ fake = Faker()
 user_name = 'tests_2@gmail.com'
 user_password = '12345678'
 alert_mms = 'Вы успешно залогинились'
+alert_success = 'Вы успешно зарегистрировались'
 
 # incorrect data
 incorrect_name = 'tests_not_2@gmail.com'

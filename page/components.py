@@ -43,6 +43,4 @@ class Register:
         self.driver.find_element(By.ID, 'name').send_keys(name)
         register_btt = wait.until(EC.visibility_of_element_located((By.XPATH, "//button[@class='ui button blue']")))
         register_btt.click()
-        wait.until(EC.url_changes(self.driver.current_url))
-
         return email, password, name

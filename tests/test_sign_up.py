@@ -1,13 +1,16 @@
+import time
 import pytest
 from faker import Faker
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from page.components import Register
-from data import generate_fixed_length_email
+from data import generate_fixed_length_email, alert_mms
 from page.registration_page import RegistrationPage
 
 URL = 'http://95.182.122.183/sign_up'
 URL_LOGIN = 'http://95.182.122.183/login'
+
 
 fake = Faker()
 password = fake.password(length=9, upper_case=True, digits=True, special_chars=True)
@@ -113,4 +116,41 @@ def test_registration_new_user_with_underline_in_email_field(driver, wait, user_
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
 
+"""TC-NN-009 Регистрация с заполненными валидными данными  полями и email состоящий из 51 символа"""
+@pytest.mark.negative
+def test_registration_new_user_with_51_simbols(driver, wait):
+    register = Register(driver)
+    register.open_page()
+    register.registration_new_user(wait, email_length=51, password_length=9, uppercase_email=False, empty_field=False)
+    alert = driver.find_element(By.CSS_SELECTOR, '.field:nth-of-type(1) .mt-2.text-sm.text-rose-600.italic').text
+    assert alert == 'Не более 50 символов', f"Ожидали ограничение в 50 символов, но получили: {alert}"
+    assert "50" in alert, f"Ожидали ограничение в 50 символов, но получили: {alert}"
+
+
+
+"""TC-NN-010 Регистрация с кириллицей в доменной части email 
+TC-NN-011 Регистрация с кириллицей в аккаунтной части email
+TC-NN-012	Регистрация с пробелом в начале email 
+TC-NN-013	Регистрация с email  без "." в доменной части  
+TC-NN-014	Регистрация с пробелом перед @ в email 
+TC-NN-015	Регистрация с пробелом в доменной части email 
+TC-NN-016	Регистрация с пробелом в конце email 
+TC-NN-017	Регистрация со спецсимволами в email  ( #$%)
+TC-NN-018	Регистрация c некорректным форматом email ( без @ ) """
+@pytest.mark.negative
+def test_registration_new_user_with_ru_domain(driver, wait, create_user_data):
+    page = Register(driver)
+    page.open_page()
+    register_field = RegistrationPage(driver, wait)
+    register_field.fill_email(create_user_data['email'])
+    register_field.fill_password(create_user_data['password'])
+    register_field.fill_name(create_user_data['name'])
+    register_field.click_register_button()
+
+    incorrect_mail = wait.until(EC.presence_of_element_located(
+        (By.XPATH, "//div[@class='field'][1] //div"))).text
+
+    alert_success = 'Вы успешно зарегистрировались'
+    assert incorrect_mail == 'Укажите корректный mail', (
+        f"Ожидалось сообщение об ошибке, но получили: {alert_success}")
 
