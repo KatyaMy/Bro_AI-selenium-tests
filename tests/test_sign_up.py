@@ -129,13 +129,12 @@ def test_registration_new_user_with_51_simbols(driver, wait):
 
 
 """TC-NN-010 Регистрация с кириллицей в доменной части email 
-TC-NN-011 Регистрация с кириллицей в аккаунтной части email
+TC-NN-011   Регистрация с кириллицей в аккаунтной части email
 TC-NN-012	Регистрация с пробелом в начале email 
 TC-NN-013	Регистрация с email  без "." в доменной части  
 TC-NN-014	Регистрация с пробелом перед @ в email 
 TC-NN-015	Регистрация с пробелом в доменной части email 
 TC-NN-016	Регистрация с пробелом в конце email 
-TC-NN-017	Регистрация со спецсимволами в email  ( #$%)
 TC-NN-018	Регистрация c некорректным форматом email ( без @ ) """
 @pytest.mark.negative
 def test_registration_new_user_with_ru_domain(driver, wait, create_user_data):
