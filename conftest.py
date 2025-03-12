@@ -42,7 +42,6 @@ def registration_data():
 
 @pytest.fixture()
 def fake_new_user():
-    fake.email()
     fake.password()
     fake.user_name()
 

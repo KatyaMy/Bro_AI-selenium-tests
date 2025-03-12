@@ -68,7 +68,7 @@ def test_registration_user_with_empty_filed(driver, wait):
 
 
 """TC-NN-003 Регистрация с заполненными валидными данными  полями и email состоящий из 6 символов"""
-def test_registration_user_with_length_6_simbols(driver, wait):
+def test_registration_user_with_length_6_symbols(driver, wait):
     register = Register(driver)
     register.open_page()
     register.registration_new_user(wait, email_length=6, password_length=9, uppercase_email=False, empty_field=False)
@@ -118,7 +118,7 @@ def test_registration_new_user_with_underline_in_email_field(driver, wait, user_
 
 """TC-NN-009 Регистрация с заполненными валидными данными  полями и email состоящий из 51 символа"""
 @pytest.mark.negative
-def test_registration_new_user_with_51_simbols(driver, wait):
+def test_registration_new_user_with_51_symbols(driver, wait):
     register = Register(driver)
     register.open_page()
     register.registration_new_user(wait, email_length=51, password_length=9, uppercase_email=False, empty_field=False)
@@ -153,3 +153,15 @@ def test_registration_new_user_with_ru_domain(driver, wait, create_user_data):
     assert incorrect_mail == 'Укажите корректный mail', (
         f"Ожидалось сообщение об ошибке, но получили: {alert_success}")
 
+
+"""TC-NN-017	Регистрация со спецсимволами в email  ( #$%)"""
+def test_registration_new_user_with_special_symbols(driver,wait):
+    page = Register(driver)
+    page.open_page()
+    register_field = RegistrationPage(driver, wait)
+    register_field.fill_email(email='@Test_user%@gmail.com')
+    register_field.fill_password(password)
+    register_field.fill_name(name)
+    register_field.click_register_button()
+    wait.until(EC.url_changes(driver.current_url))
+    assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
