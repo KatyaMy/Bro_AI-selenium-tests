@@ -1,7 +1,5 @@
-import time
 import pytest
 from faker import Faker
-from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from page.components import Register
@@ -50,19 +48,19 @@ def test_registration_user(driver, wait):
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
 
-"""TC-NN-002 Регистрация с заполненными валидными данными обязательными полями и пустым полем Имя"""
+"""TC-NN-002 Регистрация с заполненными валидными данными обязательными полями и пустым полем Имя(email <=50)"""
 
 
 def test_registration_user_with_empty_filed(driver, wait):
     email = generate_fixed_length_email(length=40)
     # print(f'=========== длина в символах {len(email)} <============')
-    driver.get(URL)
-    driver.find_element(By.ID, 'email').send_keys(email)
-    driver.find_element(By.ID, 'pass1').send_keys(password)
-    driver.find_element(By.ID, 'pass2').send_keys(password)
-    driver.find_element(By.ID, 'name').send_keys()
-    register_btt = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@class='ui button blue']")))
-    register_btt.click()
+    page = Register(driver)
+    page.open_page()
+    register_field = RegistrationPage(driver, wait)
+    register_field.fill_email(email)
+    register_field.fill_password(password)
+    register_field.fill_name(fake.name())
+    register_field.click_register_button()
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
