@@ -2,7 +2,7 @@ from faker import Faker
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-URL = 'http://95.182.122.183/sign_up'
+URL = 'http://95.182.122.183:3000/sign_up'
 
 
 class Register:
@@ -40,7 +40,7 @@ class Register:
         self.driver.find_element(By.ID, 'email').send_keys(email)
         self.driver.find_element(By.ID, 'pass1').send_keys(password)
         self.driver.find_element(By.ID, 'pass2').send_keys(password)
-        self.driver.find_element(By.ID, 'name').send_keys(name)
+        self.driver.find_element(By.ID, 'username').send_keys(name)
         register_btt = wait.until(EC.visibility_of_element_located((By.XPATH, "//button[@class='ui button blue']")))
         register_btt.click()
         return email, password, name
