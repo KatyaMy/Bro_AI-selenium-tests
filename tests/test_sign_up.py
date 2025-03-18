@@ -230,8 +230,9 @@ def test_registration_new_user_with_mismatched_characters_password_field(driver,
     page = Register(driver)
     page.open_page()
     fill_email(wait, fake.email())
-    fill_password(wait, password_1='ghjfhgurn222', password_2='00ovtS22TyD')
+    fill_password(wait, password_1=fake.password(), password_2=fake.password())
     fill_name(wait, fake.name())
     click_register_button(wait)
-    alert_element = get_alert_element(wait, empty_email_field)
-    assert alert_element.is_displayed(), "Ожидалось сообщение об ошибке при отсутствии email"
+    alert_element = driver.find_element(*mistake_pass_mms).text
+    assert alert_element == 'Пароли не совпадают', "Ожидалось сообщение об ошибке при отсутствии password_1"
+
