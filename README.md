@@ -1,6 +1,6 @@
 # Bro_AI-selenium-tests
 _____________________________________________________________________________
-> ### [Link](http://95.182.122.183/login)
+> ### [Link](http://95.182.122.183:3000/login)
 
 > ### [TC](https://docs.google.com/spreadsheets/d/1SevpyhSmJSMkv03VJZjYVEBsYz_-K_JzM_J4VKXBOwM/edit?gid=0#gid=0)
 
