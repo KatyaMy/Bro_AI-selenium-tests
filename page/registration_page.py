@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-
+from faker import Faker
+fake = Faker()
 
 def fill_email(wait, email):
     field = wait.until(EC.presence_of_element_located((By.ID, 'email')))
@@ -31,7 +32,7 @@ def click_register_button(wait):
     register_btn.click()
 
 
-def get_alert_element(wait, locator):
+def get_error_message(wait, locator):
     return wait.until(
         EC.visibility_of_element_located(locator)
     )
@@ -50,3 +51,7 @@ def empty_password_field(wait, password, field_empty=True):
     else:
         pass1.send_keys(password)
         pass2.send_keys('')
+
+
+def enter_length(length: int) -> str:
+    return fake.password(length=length, upper_case=True, digits=True, special_chars=True)
