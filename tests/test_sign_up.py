@@ -1,5 +1,6 @@
 import pytest
 from faker import Faker
+from selenium.common import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 
 from conftest import driver
@@ -53,13 +54,13 @@ def test_registration_user(driver, wait):
 """TC-NN-002 Регистрация с заполненными валидными данными обязательными полями и пустым полем Имя(email <=50)"""
 
 
-def test_registration_user_with_empty_filed(driver, wait):
+def test_registration_with_empty_field(driver, wait):
     email = generate_fixed_length_email(length=40)
     # print(f'=========== длина в символах {len(email)} <============')
     page = Register(driver)
     page.open_page()
     fill_email(wait, email)
-    fill_password(wait, password_1=password_f,password_2=password_f)
+    fill_password(wait, password_1=password_f, password_2=password_f)
     fill_name(wait, fake.name())
     click_register_button(wait)
     wait.until(EC.url_changes(driver.current_url))
@@ -69,7 +70,7 @@ def test_registration_user_with_empty_filed(driver, wait):
 """TC-NN-003 Регистрация с заполненными валидными данными  полями и email состоящий из 6 символов"""
 
 
-def test_registration_user_with_length_6_symbols(driver, wait):
+def test_registration_with_length_6_symbols(driver, wait):
     register = Register(driver)
     register.open_page()
     register.registration_new_user(wait, email_length=6, password_length=9, uppercase_email=False, empty_field=False)
@@ -79,7 +80,7 @@ def test_registration_user_with_length_6_symbols(driver, wait):
 """TC-NN-004 Регистрация с заглавными латинскими символами в email"""
 
 
-def test_registration_new_user_with_upper_case_email(driver, wait):
+def test_registration_with_upper_case_email(driver, wait):
     register = Register(driver)
     register.open_page()
     register.registration_new_user(wait, email_length=6, password_length=9, uppercase_email=True, empty_field=False)
@@ -92,7 +93,7 @@ def test_registration_new_user_with_upper_case_email(driver, wait):
 @pytest.mark.parametrize('email, user_password, user_name', [
     ('Test_User_07@hotmail.com', '123HyNcVb', 'ViktorCi')
 ])
-def test_registration_new_user_with_underline_in_email_field(driver, wait, email, user_password, user_name):
+def test_registration_with_underline_in_email_field(driver, wait, email, user_password, user_name):
     page = Register(driver)
     page.open_page()
     fill_email(wait, email)
@@ -111,7 +112,7 @@ TC-NN-007 Ввод цифр в доменной части поля "Email" """
     {'email': 'Test_User_09@gmail.com', 'password': '1244HyNcVb', 'name': ''},
     {'email': 'TestUser_YU@80hotmail.com', 'password': '1223UomVb', 'name': 'KarlaP'}
 ])
-def test_registration_new_user_with_underline_in_email_field(driver, wait, user_data):
+def test_registration_with_underline_in_email_field(driver, wait, user_data):
     page = Register(driver)
     page.open_page()
     fill_email(wait, user_data['email'])
@@ -126,7 +127,7 @@ def test_registration_new_user_with_underline_in_email_field(driver, wait, user_
 
 
 @pytest.mark.negative
-def test_registration_new_user_with_51_symbols(driver, wait):
+def test_registration_with_51_symbols(driver, wait):
     register = Register(driver)
     register.open_page()
     register.registration_new_user(wait, email_length=51, password_length=9, uppercase_email=False, empty_field=False)
@@ -146,7 +147,7 @@ TC-NN-018	Регистрация c некорректным форматом ema
 
 
 @pytest.mark.negative
-def test_registration_new_user_with_ru_domain(driver, wait, create_user_data):
+def test_registration_with_ru_domain(driver, wait, create_user_data):
     page = Register(driver)
     page.open_page()
     fill_email(wait, create_user_data['email'])
@@ -157,20 +158,23 @@ def test_registration_new_user_with_ru_domain(driver, wait, create_user_data):
     incorrect_mail = wait.until(EC.presence_of_element_located(
         (By.XPATH, "//div[@class='field'][1] //div"))).text
 
-    alert_success = 'Вы успешно зарегистрировались'
     assert incorrect_mail == 'Укажите корректный mail', (
-        f"Ожидалось сообщение об ошибке, но получили: {alert_success}")
+        f"Ожидалось сообщение 'Укажите корректный mail', но получили: {incorrect_mail}")
+
+    with pytest.raises(TimeoutException):
+        wait.until(EC.presence_of_element_located(
+            (By.XPATH, "//div[contains(text(), 'Вы успешно зарегистрировались')]")))
 
 
 """TC-NN-017	Регистрация со спецсимволами в email  ( #$%)"""
 
 
 @pytest.mark.pozitive
-def test_registration_new_user_with_special_symbols(driver, wait):
+def test_registration_with_special_symbols(driver, wait):
     page = Register(driver)
     page.open_page()
     fill_email(wait, email='@Test_user%@gmail.com')
-    fill_password(wait, password_1=password_f,password_2=password_f)
+    fill_password(wait, password_1=password_f, password_2=password_f)
     fill_name(wait, fake.name())
     click_register_button(wait)
     wait.until(EC.url_changes(driver.current_url))
@@ -181,11 +185,11 @@ def test_registration_new_user_with_special_symbols(driver, wait):
 
 
 @pytest.mark.negative
-def test_registration_new_user_with_empty_email_filled(driver, wait):
+def test_registration_fails_with_empty_email_field(driver, wait):
     page = Register(driver)
     page.open_page()
     fill_email(wait, email='')
-    fill_password(wait, password_1=password_f,password_2=password_f)
+    fill_password(wait, password_1=password_f, password_2=password_f)
     fill_name(wait, fake.name())
     click_register_button(wait)
     alert_element = get_alert_element(wait, empty_email_field)
@@ -196,7 +200,7 @@ def test_registration_new_user_with_empty_email_filled(driver, wait):
 
 
 @pytest.mark.negative
-def test_registration_new_user_with_empty_first_password_filled(driver, wait):
+def test_registration_fails_with_missing_password(driver, wait):
     page = Register(driver)
     page.open_page()
     fill_email(wait, email=fake.email())
@@ -211,7 +215,7 @@ def test_registration_new_user_with_empty_first_password_filled(driver, wait):
 
 
 @pytest.mark.negative
-def test_registration_new_user_with_empty_second_password_field(driver, wait):
+def test_registration_fails_with_empty_password_confirmation(driver, wait):
     page = Register(driver)
     page.open_page()
     fill_email(wait, email=fake.email())
@@ -226,13 +230,19 @@ def test_registration_new_user_with_empty_second_password_field(driver, wait):
 
 
 @pytest.mark.negative
-def test_registration_new_user_with_mismatched_characters_password_field(driver, wait):
+def test_registration_fails_with_mismatched_passwords(driver, wait):
     page = Register(driver)
     page.open_page()
     fill_email(wait, fake.email())
     fill_password(wait, password_1=fake.password(), password_2=fake.password())
     fill_name(wait, fake.name())
     click_register_button(wait)
-    alert_element = driver.find_element(*mistake_pass_mms).text
-    assert alert_element == 'Пароли не совпадают', "Ожидалось сообщение об ошибке при отсутствии password_1"
+    alert_text = driver.find_element(*error_password_mismatch).text
+    assert alert_text == 'Пароли не совпадают', "Ожидалось сообщение об ошибке при отсутствии password_1"
 
+
+"""TC-NN-023 Попытка регистрации с 7 символами в поле Пароль """
+
+
+def test_register_with_short_password(driver, wait):
+    pass
