@@ -8,3 +8,4 @@ error_password_mismatch = By.XPATH, '//div[contains(text(),"Пароли не с
 error_password_message = By.XPATH, '(//div[contains(text(),"Не менее 8 символов")])[1]'
 massage_about_registration = By.XPATH, "//div[contains(text(), 'Вы успешно зарегистрировались')]"
 # //div[contains(text(),"Это поле обязательно")]
+error_message_51 = By.XPATH, '(//div[contains(text(),"Не более 50 символов")])[1]'
