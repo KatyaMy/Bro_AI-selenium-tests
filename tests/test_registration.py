@@ -310,7 +310,7 @@ def test_signup_with_cyrillic_password(driver, wait):
     fill_name(wait, fake.name())
     click_register_button(wait)
 
-    # Проверка наличия ошибк
+    # Проверка наличия ошибки
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
@@ -327,7 +327,7 @@ def test_registration_with_digits_only_password(driver, wait):
     fill_name(wait, fake.name())
     click_register_button(wait)
 
-    # Проверка наличия ошибк
+    # Проверка наличия ошибки
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
@@ -343,7 +343,7 @@ def test_registration_with_password_space(driver, wait):
     fill_name(wait, fake.name())
     click_register_button(wait)
 
-    # Проверка наличия ошибк
+    # Проверка наличия ошибки
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
@@ -355,7 +355,7 @@ def test_registration_with_50_characters_password(driver, wait):
     page = Register(driver)
     page.open_page()
     page.registration_new_user(wait, email_length= 10, password_length=50)
-    # Проверка наличия ошибк
+    # Проверка наличия ошибки
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
@@ -366,7 +366,7 @@ def test_registration_with_49_characters_password(driver, wait):
     page = Register(driver)
     page.open_page()
     page.registration_new_user(wait, email_length= 10, password_length=49)
-    # Проверка наличия ошибк
+    # Проверка наличия ошибки
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
