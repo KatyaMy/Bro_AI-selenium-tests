@@ -33,6 +33,7 @@ class Register:
             return email.upper()
         return email
 
+
     def registration_new_user(self, wait, email_length, password_length, empty_field=None, uppercase_email=False):
         email, password, name = self.generate_user_data(email_length, password_length, empty_field)
         email = self.transform_email(email, uppercase_email)

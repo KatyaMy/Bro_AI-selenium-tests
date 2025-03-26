@@ -1,5 +1,3 @@
-import time
-
 import pytest
 from faker import Faker
 from selenium.common import TimeoutException
@@ -300,6 +298,8 @@ def test_register_with_short_password(driver, wait):
 
 
 """TC-NN-026 Ввод кириллицы в поле Пароль"""
+
+
 @pytest.mark.xfail(reason="Баг, регистрация не происходит после ввода корректных данных")
 @pytest.mark.positive
 def test_signup_with_cyrillic_password(driver, wait):
@@ -315,8 +315,9 @@ def test_signup_with_cyrillic_password(driver, wait):
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
 
-
 """TC-NN-027 Ввод цифр в поле "Пароль"""
+
+
 @pytest.mark.xfail(reason="Баг, регистрация не происходит после ввода корректных данных")
 @pytest.mark.positive
 def test_registration_with_digits_only_password(driver, wait):
@@ -333,6 +334,8 @@ def test_registration_with_digits_only_password(driver, wait):
 
 
 """TC-NN-028 Ввод пароля с пробелом"""
+
+
 @pytest.mark.xfail(reason="Баг, регистрация не происходит после ввода корректных данных")
 @pytest.mark.positive
 def test_registration_with_password_space(driver, wait):
@@ -349,35 +352,41 @@ def test_registration_with_password_space(driver, wait):
 
 
 """TC-NN-029 Регистрация с 50 символами в поле Пароль"""
+
+
 @pytest.mark.xfail(reason="Баг, регистрация не происходит после ввода корректных данных")
 @pytest.mark.positive
 def test_registration_with_50_characters_password(driver, wait):
     page = Register(driver)
     page.open_page()
-    page.registration_new_user(wait, email_length= 10, password_length=50)
+    page.registration_new_user(wait, email_length=10, password_length=50)
     # Проверка наличия ошибки
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
+
 """TC-NN-030	Регистрация с 49 символами в поле Пароль """
+
+
 @pytest.mark.xfail(reason="Баг, регистрация не происходит после ввода корректных данных")
 @pytest.mark.positive
 def test_registration_with_49_characters_password(driver, wait):
     page = Register(driver)
     page.open_page()
-    page.registration_new_user(wait, email_length= 10, password_length=49)
+    page.registration_new_user(wait, email_length=10, password_length=49)
     # Проверка наличия ошибки
     wait.until(EC.url_changes(driver.current_url))
     assert driver.current_url == URL_LOGIN, 'Некорректно переданные данные'
 
 
-
 """TC-NN-030	Регистрация с 51 символами в поле Пароль """
+
+
 @pytest.mark.negative
 def test_registration_with_51_characters_password(driver, wait):
     page = Register(driver)
     page.open_page()
-    page.registration_new_user(wait, email_length= 10, password_length=51)
+    page.registration_new_user(wait, email_length=10, password_length=51)
     # Проверка наличия ошибк
     error_message = get_error_message(wait, error_message_51).text
     assert "Не более 50 символов" in error_message, f"Ожидалось сообщение об ошибке, но не получилось: {error_message}"
